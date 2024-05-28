@@ -1,0 +1,97 @@
+﻿@model List<WebBanCaCanh.Models.Banner>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-5 text-center text-uppercase">Danh sách banner</h1>
+<p>
+    @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>Ảnh</th>
+        <th>Nội dung</th>
+        <th>Hiển thị</th>
+        <th>Ngày tạo</th>
+        <th>Thao tác</th>
+    </tr>
+    @foreach (var banner in Model)
+    {
+        <tr>
+            <td><img src="/Content/Images/@banner.ImageUrl" alt="Banner Image" height="40"></td>
+            <td>@banner.Content</td>
+            <td>@(banner.IsVisible ? "Có" : "Không")</td>
+            <td>@banner.CreatedAt.ToString("dd/MM/yyyy")</td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = banner.BannerId })" class="text-primary"><i class="fas fa-edit"></i></a> |
+                <a href="#" class="delete-link text-danger" data-id="@banner.BannerId" data-target="#deleteConfirmationModal"><i class="fas fa-trash-alt"></i></a>
+            </td>
+        </tr>
+    }
+</table>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn xóa banner này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+
+            document.querySelectorAll('.delete-link').forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var bannerId = this.getAttribute('data-id');
+                    deleteModal.show();
+
+                    document.getElementById('confirmDelete').addEventListener('click', function () {
+                        deleteModal.hide();
+                        fetch('@Url.Action("Delete", "Banner")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ id: bannerId })
+                        })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(function (result) {
+                            if (result.success) {
+                                alert("Banner deleted successfully!");
+                                location.reload();
+                            } else {
+                                alert("Failed to delete banner!");
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error('Error:', error);
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+}

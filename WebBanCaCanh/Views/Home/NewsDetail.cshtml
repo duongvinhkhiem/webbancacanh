@@ -1,0 +1,18 @@
+﻿@model WebBanCaCanh.Models.News
+
+@{
+    ViewBag.Title = "News";
+}
+
+<div class="container">
+   
+            <div class="card mb-4">
+                <img class="card-img-top" src="/Content/Images/@Model.ImageUrl" alt="@Model.Title">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Title</h5>
+                    <p class="card-text">@Model.Content</p>
+                    <p class="card-text"><small class="text-muted">Đăng ngày @Model.CreatedAt.ToShortDateString()</small></p>
+                 
+                </div>
+            </div>
+</div>

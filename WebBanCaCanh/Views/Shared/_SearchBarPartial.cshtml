@@ -1,0 +1,11 @@
+﻿<div class="col-md-8 col-lg-7 col-xl-6 mx-auto">
+    @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "w-100", id = "searchForm" }))
+    {
+        <div class="input-group w-100">
+            <input type="search" class="form-control border-secondary" id="searchInput" name="query" placeholder="Tìm kiếm">
+            <button type="submit" class="btn btn-outline-secondary" id="btn-search">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    }
+</div>

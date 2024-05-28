@@ -1,0 +1,39 @@
+﻿@model List<WebBanCaCanh.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-5 text-center text-uppercase">Danh sách đơn hàng</h1>
+<table class="table">
+    <tr>
+        <th>Mã đơn hàng</th>
+        <th>Ngày đặt hàng</th>
+       
+        <th>Người đặt hàng</th>
+        <th>Số điện thoại</th>
+        <th>Thành phố</th>
+        <th>Quận/Huyện</th>
+        <th>Địa chỉ</th>
+        <th>Ghi chú</th>
+        <th></th>
+    </tr>
+    @foreach (var order in Model)
+    {
+        <tr>
+            <td>@order.OrderId</td>
+            <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+           
+            <td>@order.CustomerName</td>
+            <td>@order.PhoneNumber</td>
+            <td>@order.City</td>
+            <td>@order.District</td>
+            <td>@order.Address</td>
+            <td>@order.Note</td>
+            <td>
+                @* Thêm các liên kết chỉnh sửa hoặc xóa tùy theo yêu cầu *@
+            </td>
+        </tr>
+    }
+</table>

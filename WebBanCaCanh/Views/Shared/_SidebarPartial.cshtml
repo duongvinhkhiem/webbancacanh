@@ -1,0 +1,30 @@
+﻿<div class="sidebar">
+    <h4 style="margin-bottom: 10px;">Danh mục</h4>
+    <ul class="category-list list-unstyled">
+        @foreach (var category in ViewBag.Categories)
+        {
+            bool isSelected = ViewBag.SelectedCategoryId != null && category.CategoryId == ViewBag.SelectedCategoryId;
+
+            <li style="margin-bottom: 5px;">
+                @if (isSelected)
+                {
+                    <span class="text-primary">@category.CategoryName</span>
+                }
+                else
+                {
+                    <a href="@Url.Action("Product", "Home", new { categoryId = category.CategoryId })" class="text-decoration-none text-dark category-link">@category.CategoryName</a>
+                }
+            </li>
+        }
+    </ul>
+</div>
+
+<style>
+    .category-link:hover {
+        color: #007bff; /* Bootstrap primary color for hover */
+    }
+
+    .category-link {
+        transition: color 0.3s;
+    }
+</style>

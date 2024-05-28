@@ -1,0 +1,131 @@
+﻿@model PagedList.IPagedList<WebBanCaCanh.Models.Product>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-5 text-center text-uppercase">Sản phẩm</h1>
+<p>
+    @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Số lượng tồn</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="/Content/Images/@item.ImageUrl" alt="@item.ProductName" height="40">
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>@Html.DisplayFor(modelItem => item.StockQuantity)</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.ProductId })" class="text-primary"><i class="fas fa-edit"></i></a> |
+                    <a href="#" class="delete-link text-danger" data-id="@item.ProductId" data-target="#deleteConfirmationModal"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="pagination-container">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedList.Mvc.PagedListRenderOptions
+            {
+                LiElementClasses = new[] { "page-item" },
+                UlElementClasses = new[] { "pagination" },
+                LinkToPreviousPageFormat = "&laquo;",
+                LinkToNextPageFormat = "&raquo;",
+                DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                Display = PagedListDisplayMode.Always,
+                DisplayLinkToIndividualPages = true,
+                ClassToApplyToFirstListItemInPager = "page-item",
+                ClassToApplyToLastListItemInPager = "page-item",    
+                LinkToIndividualPageFormat = "{0}"   
+            })
+        </ul>
+    </nav>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn xóa sản phẩm này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var deleteButtons = document.querySelectorAll('.delete-link');
+
+            deleteButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var productId = button.getAttribute('data-id');
+                    var deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+                    deleteConfirmationModal.show();
+
+                    var confirmDeleteButton = document.getElementById('confirmDelete');
+                    confirmDeleteButton.onclick = function () {
+                        fetch('@Url.Action("Delete", "Product")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ id: productId })
+                        })
+                        .then(function (response) {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Lỗi không phản hồi.');
+                            }
+                        })
+                        .then(function (data) {
+                            if (data.success) {
+                                location.reload();
+                            } else {
+                                console.log('Delete operation failed.');
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error('Error:', error);
+                        })
+                        .finally(function () {
+                            deleteConfirmationModal.hide();
+                        });
+                    };
+                });
+            });
+        });
+    </script>
+}

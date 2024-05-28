@@ -1,0 +1,68 @@
+﻿@model WebBanCaCanh.Models.Banner
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-5 text-center text-uppercase">Thêm Banner</h1>
+
+@using (Html.BeginForm("Create", "Banner", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Content, "Nội dung mô tả", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+        @Html.TextAreaFor(model => model.Content, new { @class = "form-control", rows = 4 })
+        @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group my-2">
+        <label class="control-label col-md-2" for="imageFile">Ảnh banner</label>
+
+        <input type="file" name="imageFile" />
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsVisible, "Hiển thị")
+        <div>
+            @Html.RadioButtonFor(model => model.IsVisible, true, new { id = "isVisibleTrue" })
+            <label for="isVisibleTrue">Có</label>
+
+            @Html.RadioButtonFor(model => model.IsVisible, false, new { id = "isVisibleFalse" })
+            <label for="isVisibleFalse">Không</label>
+        </div>
+
+    </div>
+    <div class="form-group">
+        @Html.Label("Ngày bắt đầu", htmlAttributes: new { @class = "control-label col-md-2" })
+
+        <div class="col-md-10">
+            <input type="datetime-local" name="StartDate" class="form-control" />
+            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Ngày kết thúc", htmlAttributes: new { @class = "control-label col-md-2" })
+
+        <div class="col-md-10">
+            <input type="datetime-local" name="EndDate" class="form-control" />
+            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Trở về</a>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,22 @@
+﻿@model List<WebBanCaCanh.Models.Product>
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+<div class="container">
+    <h2 class="mt-3">Kết quả tìm kiếm</h2>
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                @Html.Partial("_ProductCardPartial", product)
+            }
+        }
+        else
+        {
+            <p>Không tìm thấy kết quả.</p>
+        }
+    </div>
+</div>

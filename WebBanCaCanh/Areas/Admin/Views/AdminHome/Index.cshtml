@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml"; // Đảm bảo sử dụng layout chung cho phần admin
+}
+
+<h1 class="my-5 text-center text-uppercase">Thống kê</h1>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Tổng số sản phẩm</h5>
+                        <i class="fa fa-box fa-2x"></i>
+                    </div>
+                    <p class="card-text">@ViewBag.ProductCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-white bg-secondary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Tổng số danh mục</h5>
+                        <i class="fa fa-list fa-2x"></i>
+                    </div>
+                    <p class="card-text">@ViewBag.CategoryCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Tổng số đơn hàng</h5>
+                        <i class="fa fa-shopping-cart fa-2x"></i>
+                    </div>
+                    <p class="card-text">@ViewBag.OrderCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Tổng số tin tức</h5>
+                        <i class="fa fa-newspaper fa-2x"></i>
+                    </div>
+                    <p class="card-text">@ViewBag.NewsCount</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Doanh thu hôm nay</h5>
+                        <i class="fa fa-calendar-day fa-2x"></i>
+                    </div>
+                    <p class="card-text">@string.Format("{0:#,##0} đ", ViewBag.RevenueToday)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Doanh thu tháng này</h5>
+                        <i class="fa fa-calendar-alt fa-2x"></i>
+                    </div>
+                    <p class="card-text">@string.Format("{0:#,##0} đ", ViewBag.RevenueThisMonth)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mt-5">
+            <div class="card bg-light">
+                <div class="card-body text-dark">
+                    <h5 class="card-title">Biểu đồ doanh thu theo tháng</h5>
+                    <canvas id="revenueChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    // Retrieve revenue data from ViewBag
+    var revenueData = ViewBag.RevenueByYear;
+
+    // Initialize empty arrays for labels and data
+    var labels = new List<string>();
+    var data = new List<decimal>();
+
+    // Populate arrays with ViewBag data
+    foreach (var item in revenueData)
+    {
+        labels.Add(item.Key.ToString());
+        data.Add(item.Value);
+    }
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script>
+    var ctx = document.getElementById('revenueChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Encode(labels)),
+            datasets: [{
+                label: 'Doanh thu',
+                data: @Html.Raw(Json.Encode(data)),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value) { return value.toLocaleString('vi-VN') + ' đ'; }
+                    }
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return tooltipItem.yLabel.toLocaleString('vi-VN') + ' đ';
+                    }
+                }
+            }
+        }
+    });
+</script>

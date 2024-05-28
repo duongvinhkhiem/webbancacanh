@@ -1,0 +1,39 @@
+﻿@model WebBanCaCanh.Models.Product
+
+@if (Model.IsVisible)
+{
+    <div class="col-md-3 my-3">
+        <div class="card product-card" onclick="window.location.href='@Url.Action("Details", "Home", new { id = Model.ProductId })'" style="cursor: pointer;">
+            <img src="/Content/Images/@Model.ImageUrl" class="img-rounded card-img-top fixed-size-img" alt="@Model.ProductName">
+            <div class="card-body">
+                <p class="card-title text-center product-name">@Model.ProductName</p>
+                <p class="card-text text-center lead font-weight-bold">@string.Format("{0:#,##0} đ", Model.Price)</p>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .fixed-size-img {
+        width: 100%;
+        height: 250px; /* Set a fixed height for the image */
+        object-fit: cover; /* This ensures the image covers the area without distorting */
+    }
+
+    .card {
+        height: 400px; /* Set a fixed height for the card */
+        transition: transform 0.3s; /* Smooth transition for hover effect */
+    }
+
+        .card:hover {
+            transform: scale(1.05); /* Slightly increase the size of the card on hover */
+        }
+
+    .product-name {
+        transition: font-weight 0.3s; /* Smooth transition for font weight */
+    }
+
+    .card:hover .product-name {
+        font-weight: bold; /* Make the product name bold on hover */
+    }
+</style>

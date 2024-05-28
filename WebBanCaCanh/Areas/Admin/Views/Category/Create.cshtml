@@ -1,0 +1,27 @@
+﻿@model WebBanCaCanh.Models.Category
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-5 text-center text-uppercase">Thêm danh mục sản phẩm</h1>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CategoryName, "Tên danh mục", htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mt-2">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Trở về</a>
+        </div>
+    </div>
+
+
+}
+

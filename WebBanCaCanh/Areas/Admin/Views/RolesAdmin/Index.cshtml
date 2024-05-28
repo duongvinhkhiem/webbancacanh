@@ -1,0 +1,172 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-5 text-center text-uppercase">Phân quyền</h1>
+
+<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createRoleModal">Thêm quyền</button>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên quyền</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Name</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editRoleModal" data-role-id="@role.Id" data-role-name="@role.Name"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteRoleModal" data-role-id="@role.Id" data-role-name="@role.Name"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Create Role Modal -->
+<div class="modal fade" id="createRoleModal" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createRoleForm">
+                    <div class="form-group">
+                        <label for="createRoleName">Role Name</label>
+                        <input type="text" class="form-control" id="createRoleName" name="Name" required>
+                    </div>
+                    <div id="createRoleErrors" class="text-danger"></div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Role Modal -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editRoleForm">
+                    <input type="hidden" id="editRoleId" name="Id">
+                    <div class="form-group">
+                        <label for="editRoleName">Role Name</label>
+                        <input type="text" class="form-control" id="editRoleName" name="Name" required>
+                    </div>
+                    <div id="editRoleErrors" class="text-danger"></div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Role Modal -->
+<div class="modal fade" id="deleteRoleModal" tabindex="-1" role="dialog" aria-labelledby="deleteRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteRoleModalLabel">Delete Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa quyền <strong id="deleteRoleName"></strong>?</p>
+                <input type="hidden" id="deleteRoleId">
+                <div id="deleteRoleErrors" class="text-danger"></div>
+                <button type="button" class="btn btn-danger" id="confirmDeleteRole">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            // Create Role
+            $('#createRoleForm').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("Create")',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            $('#createRoleErrors').text(response.errors.join(', '));
+                        }
+                    }
+                });
+            });
+
+            // Edit Role
+            $('#editRoleModal').on('show.bs.modal', function(e) {
+                var button = $(e.relatedTarget);
+                var roleId = button.data('role-id');
+                var roleName = button.data('role-name');
+                $('#editRoleId').val(roleId);
+                $('#editRoleName').val(roleName);
+            });
+
+            $('#editRoleForm').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("Edit")',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            $('#editRoleErrors').text(response.errors.join(', '));
+                        }
+                    }
+                });
+            });
+
+            // Delete Role
+            $('#deleteRoleModal').on('show.bs.modal', function(e) {
+                var button = $(e.relatedTarget);
+                var roleId = button.data('role-id');
+                var roleName = button.data('role-name');
+                $('#deleteRoleId').val(roleId);
+                $('#deleteRoleName').text(roleName);
+            });
+
+            $('#confirmDeleteRole').on('click', function() {
+                var roleId = $('#deleteRoleId').val();
+                $.ajax({
+                    url: '@Url.Action("Delete")',
+                    type: 'POST',
+                    data: { id: roleId },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            $('#deleteRoleErrors').text(response.errors.join(', '));
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

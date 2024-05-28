@@ -1,0 +1,109 @@
+﻿@model WebBanCaCanh.Models.Product
+
+@{
+    ViewBag.Title = "Product Detail";
+}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img id="productImage" class="img-fluid rounded" alt="Product Image" src="/Content/Images/@Model.ImageUrl">
+        </div>
+        <div class="col-md-6">
+            <h2 id="productName">@Model.ProductName</h2>
+            <p id="productDescription">@Model.Description</p>
+            <p id="productPrice">@string.Format("{0:#,##0} đ", @Model.Price)</p>
+            <form id="addToCartForm" action="@Url.Action("AddToCart", "Home")" method="POST">
+                <div class="form-group">
+
+                    <input type="hidden" name="productId" value="@Model.ProductId">
+                    <input type="hidden" name="quantity" value="1">
+
+                </div>
+                <button type="submit" id="addToCartBtn" class="btn btn-primary" name="addToCartBtn">Thêm vào giỏ hàng</button>
+            </form>
+
+
+            <div class="product-single__policy">
+                <div class="product-policy">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <i class="fas fa-wrench"></i>
+                                </div>
+                                <span class="product-policy__title">
+                                    Tư vấn miễn phí
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <i class="fas fa-shipping-fast"></i>
+                                </div>
+                                <span class="product-policy__title">
+                                    Miễn phí vận chuyển toàn quốc<br> cho đơn hàng từ 150k
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <span class="product-policy__title">
+                                    Đổi trả dễ dàng <br>  (trong vòng 7 ngày)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <span class="product-policy__title">
+                                    Hotline 1234.567.890<br>
+                                    hỗ trợ từ 8h30-21h30
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <span class="product-policy__title">
+                                    Giao hàng tận nơi,<br> nhận hàng xong thanh toán
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <span class="product-policy__title">
+                                    Ưu đãi tích điểm và <br>hưởng quyền lợi thành viên
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div id="relativeProductContainer" class="mb-4">
+        <h3>Related Products</h3>
+        <div id="relativeProduct" class="row">
+            @foreach (var relatedProduct in ViewBag.RelativeProducts)
+            {
+                @Html.Partial("_ProductCardPartial", (object)relatedProduct)
+
+            }
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+﻿@model List<WebBanCaCanh.Models.Category>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<h1 class="mt-5 text-center text-uppercase">Danh mục sản phẩm</h1>
+<p>
+    @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>Tên danh mục</th>
+        <th>Thao tác</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CategoryName</td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.CategoryId })" class="text-primary"><i class="fas fa-edit"></i></a> |
+                <a href="#" class="delete-link text-danger" data-id="@item.CategoryId" data-target="#deleteConfirmationModal"><i class="fas fa-trash-alt"></i></a>
+            </td>
+        </tr>
+    }
+</table>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Xác nhận</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Xác nhận xóa danh mục?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-link');
+            const confirmDeleteButton = document.getElementById('confirmDelete');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+
+            deleteButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const dataId = button.getAttribute('data-id');
+                    confirmDeleteButton.setAttribute('data-id', dataId);
+                    deleteModal.show();
+                });
+            });
+
+            confirmDeleteButton.addEventListener('click', function () {
+                const dataId = confirmDeleteButton.getAttribute('data-id');
+                fetch('@Url.Action("Delete", "Category")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ id: dataId })
+                })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Lỗi không phản hồi.');
+                    }
+                })
+                .then(function (data) {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        console.log('Lỗi khi xóa danh mục.');
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                })
+                .finally(function () {
+                    deleteModal.hide();
+                });
+            });
+        });
+    </script>
+}

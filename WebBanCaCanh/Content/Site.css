@@ -1,0 +1,239 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    min-height: 50vh;
+}
+
+/* Override the default Bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column */
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+
+/* Banner Slideshow */
+#banner-slideshow {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.banner-container {
+    display: flex;
+}
+
+.banner {
+    flex: 0 0 auto;
+    width: 100%;
+    display: none;
+}
+
+.banner img {
+    width: 100%;
+    max-height: 50vh;
+}
+
+/* Navigation Buttons */
+button.prev,
+button.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 2.5rem;
+    z-index: 100;
+}
+
+button.prev {
+    left: 0;
+}
+
+button.next {
+    right: 0;
+}
+
+/* General Styles */
+* {
+    font-family: sans-serif;
+}
+
+.no-background {
+    background-color: transparent !important;
+}
+
+.no-border {
+    border: none !important;
+}
+
+h1 {
+    color: #007bff;
+}
+
+.header-link {
+    color: #000;
+    text-decoration: none;
+}
+
+    .header-link:hover {
+        color: #343a40;
+        text-decoration: none;
+    }
+
+#cartItemCount {
+    top: -10px;
+    right: -6px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+/* Buttons */
+.btn-view-details,
+.btn-add-to-cart {
+    font-size: 0.8rem;
+    padding: 5px;
+}
+
+.nav-item .nav-link {
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #000 !important;
+}
+
+    .nav-item .nav-link:hover {
+        color: #343a40 !important;
+    }
+
+.nav-item .nav-link-admin {
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #fff !important;
+}
+
+    .nav-item .nav-link-admin:hover {
+        color: #eee !important;
+    }
+
+.fa-shopping-cart {
+    font-size: 1.4rem;
+}
+
+/* Product Buttons */
+.button-size {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+    .button-size.selected {
+        border-color: red;
+    }
+
+/* Product Details */
+#productPrice {
+    color: red;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#productName {
+    font-size: 1.2rem;
+}
+
+#productDescription {
+    color: #343a40;
+}
+
+.product-single__policy {
+    margin: 40px 15px;
+}
+
+.product-policy__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+    .product-policy__icon i {
+        color: red;
+        font-size: 1.2rem;
+    }
+
+.product-policy__title {
+    font-size: 0.8rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Add to Cart Button */
+#addToCartBtn {
+    background-color: transparent;
+    border: 1px solid red;
+    color: red;
+    font-size: 16px;
+    border-radius: 0;
+}
+
+    #addToCartBtn:hover {
+        background-color: red;
+        color: white;
+    }
+
+/* Relative Product Container */
+#relativeProductContainer {
+    margin: 20px 0;
+}
+
+/* Transparent Button */
+.btn-transparent {
+    background-color: transparent;
+    border-color: transparent;
+    color: inherit;
+}
+
+    .btn-transparent:hover {
+        color: red;
+    }
+
+/* Checkout Button */
+#checkoutBtn {
+    background-color: transparent;
+    border: 1px solid green;
+    color: green;
+    font-size: 16px;
+    border-radius: 0;
+}
+
+    #checkoutBtn:hover {
+        background-color: green;
+        color: white;
+    }
+
+/* Order Button */
+#btn-order {
+    background-color: transparent;
+    border: 1px solid blue;
+    color: blue;
+    font-size: 16px;
+    border-radius: 0;
+}
+
+    #btn-order:hover {
+        background-color: blue;
+        color: white;
+    }

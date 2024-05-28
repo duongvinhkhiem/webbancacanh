@@ -1,0 +1,97 @@
+﻿@model List<WebBanCaCanh.Models.Promotion>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1 class="mt-5 text-center text-uppercase">Khuyến mãi</h1>
+<p>
+    @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>Tên khuyến mãi</th>
+        <th>Ngày bắt đầu</th>
+        <th>Ngày kết thúc</th>
+        <th>Phần trăm</th>
+        <th>Thao tác</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.PromotionName</td>
+            <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+            <td>@item.EndDate.ToString("yyyy-MM-dd")</td>
+            <td>@item.DiscountPercentage</td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.PromotionId })" class="text-primary"><i class="fas fa-edit"></i></a> |
+                <a href="#" class="delete-link text-danger" data-id="@item.PromotionId" data-target="#deleteConfirmationModal"><i class="fas fa-trash-alt"></i></a> |
+           
+            </td>
+        </tr>
+    }
+</table>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn xóa khuyến mãi?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.delete-link').forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var promotionId = this.getAttribute('data-id');
+                    var deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+                    deleteConfirmationModal.show();
+
+                    document.getElementById('confirmDelete').addEventListener('click', function () {
+                        deleteConfirmationModal.hide();
+                        fetch('@Url.Action("Delete", "Promotion")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ id: promotionId })
+                        })
+                        .then(function (response) {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Network response was not ok');
+                            }
+                        })
+                        .then(function (result) {
+                            if (result.success) {
+                                window.location.reload();
+                            } else {
+                                console.log('Delete operation failed.');
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error('Error:', error);
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+}

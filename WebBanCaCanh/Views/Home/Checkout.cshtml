@@ -1,0 +1,53 @@
+﻿@model WebBanCaCanh.ViewModels.CheckoutViewModel
+
+@{
+    ViewBag.Title = "Checkout";
+}
+
+
+    <div class="container">
+        <h2 class="mt-4 mb-4 text-center">Thông tin khách hàng</h2>
+        @using (Html.BeginForm("Checkout", "Home", FormMethod.Post, new { id = "checkoutForm" }))
+        {
+            <div class="row">
+                <!-- Cột trái -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Họ và tên</label>
+                        @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", id = "customerName", required = "required" })
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", id = "phoneNumber", required = "required" })
+                    </div>
+                  
+                    <div class="mb-3">
+                        <label for="city" class="form-label">Thành phố</label>
+                        @Html.TextBoxFor(model => model.City, new { @class = "form-control", id = "city", required = "required" })
+                    </div>
+               
+                </div>
+                <div class="col-md-6">
+                    
+             
+                    <div class="mb-3">
+                        <label for="district" class="form-label">Quận/Huyện</label>
+                        @Html.TextBoxFor(model => model.District, new { @class = "form-control", id = "district", required = "required" })
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Địa chỉ</label>
+                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", id = "address", required = "required" })
+                    </div>
+                    <div class="mb-3">
+                        <label for="note" class="form-label">Ghi chú</label>
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", id = "note" })
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-end mb-5">
+                <div class="col-auto">
+                    <button type="submit" class="btn" id="btn-order" name="btn-order">Xác nhận đơn hàng</button>
+                </div>
+            </div>
+        }
+    </div>

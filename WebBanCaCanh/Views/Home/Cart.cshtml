@@ -1,0 +1,85 @@
+﻿@model List<WebBanCaCanh.Models.OrderDetail>
+@{
+    ViewBag.Title = "Cart";
+}
+
+
+    <div class="container">
+        <div id="cartItems" class="mb-4">
+            @if (Model != null && Model.Count > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Sản phẩm</th>
+                        
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Thành tiền</th>
+                            <th scope="col">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><img src="/Content/Images/@item.Product.ImageUrl" alt="@item.Product.ProductName" style="max-width: 100px;"></td>
+                                <td>@item.Product.ProductName</td>
+
+                                <td>@String.Format("{0:#,###}", item.UnitPrice)</td>
+                                <td>
+                                    <form method="POST" action="@Url.Action("UpdateCart", "Home")" class="quantity-form" style="display: inline;">
+                                        <input type="hidden" name="orderId" value="@item.OrderDetailId">
+                                        <input type="hidden" name="productId" value="@item.ProductId">
+
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <button type="submit" name="action" value="decrease" class="no-background no-border">-</button>
+                                            </span>
+                                            <span>@item.Quantity</span>
+                                            <span class="input-group-btn">
+                                                <button type="submit" name="action" value="increase" class="no-background no-border">+</button>
+                                            </span>
+                                        </div>
+                                    </form>
+
+                                </td>
+
+                                <td>@String.Format("{0:#,###}", item.UnitPrice * item.Quantity)</td>
+
+                                <td>
+                                    <form method="POST" action="@Url.Action("RemoveFromCart", "Home")">
+                                        <input type="hidden" name="orderId" value="@item.OrderId">
+                                        <input type="hidden" name="productId" value="@item.ProductId">
+
+                                        <button type="submit" class="no-background no-border">X</button>
+
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    <tr>
+                        <td colspan="5" style="text-align: right;"><strong>Tổng tiền:</strong></td>
+                        <td colspan="2">@String.Format("{0:#,###}", Model.Sum(item => (item.UnitPrice * item.Quantity)))</td>
+
+
+                    </tr>
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>Không có sản phẩm trong giỏ hàng của bạn.</p>
+            }
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                @if (Model != null && Model.Count > 0)
+                {
+                    <a href="@Url.Action("Checkout", "Home")" class="btn btn-primary">Thanh toán</a>
+                }
+            </div>
+        </div>
+    </div>
+

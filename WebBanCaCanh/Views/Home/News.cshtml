@@ -1,0 +1,32 @@
+﻿@model List<WebBanCaCanh.Models.News>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        if (item.IsVisible)
+        {
+            <div class="col-md-3">
+                <a href="@Url.Action("NewsDetail", "Home", new { id = item.NewsId })" class="card-link" style="text-decoration: none; color: inherit;">
+                    <div class="card mb-3">
+                        <img class="card-img-top" src="/Content/Images/@item.ImageUrl" alt="@item.Title">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <p class="card-text">@TruncateText(item.Content, 100)</p>
+                            <p class="card-text"><small class="text-muted">@item.CreatedAt.ToShortDateString()</small></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    }
+</div>
+
+
+@functions {
+    public static string TruncateText(string text, int length)
+    {
+        if (text.Length <= length)
+            return text;
+        else
+            return text.Substring(0, length) + "...";
+    }
+}
