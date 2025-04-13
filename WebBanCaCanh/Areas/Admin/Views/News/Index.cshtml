@@ -80,10 +80,10 @@
                         })
                         .then(function (result) {
                             if (result.success) {
-                                alert("News deleted successfully!");
+                                console.log("News deleted successfully!");
                                 location.reload();
                             } else {
-                                alert("Failed to delete news!");
+                                console.log("Failed to delete news!");
                             }
                         })
                         .catch(function (error) {

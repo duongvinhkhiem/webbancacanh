@@ -29,6 +29,7 @@ namespace WebBanCaCanh.Models
         public DbSet<ProductPromotion> ProductPromotions { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<News> News { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -72,6 +73,12 @@ namespace WebBanCaCanh.Models
                 .WillCascadeOnDelete(true);
             modelBuilder.Entity<Banner>();
             modelBuilder.Entity<News>();
+
+            modelBuilder.Entity<ProductImage>()
+              .HasRequired(pi => pi.Product)
+              .WithMany(p => p.ProductImages)
+              .HasForeignKey(pi => pi.ProductId)
+              .WillCascadeOnDelete(true);
         }
     }
 }

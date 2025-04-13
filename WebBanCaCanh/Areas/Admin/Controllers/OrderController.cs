@@ -8,9 +8,10 @@ using WebBanCaCanh.Service;
 
 namespace WebBanCaCanh.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")] // Chỉ cho phép người dùng có vai trò "Admin" truy cập
     public class OrderController : Controller
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderService _orderService; // Dịch vụ đơn hàng
 
         public OrderController(IOrderService orderService)
         {
@@ -20,8 +21,8 @@ namespace WebBanCaCanh.Areas.Admin.Controllers
         // GET: Order
         public async Task<ActionResult> Index()
         {
-            var orders = await _orderService.GetAllOrdersAsync();
-            return View(orders);
+            var orders = await _orderService.GetAllOrdersAsync(); // Lấy tất cả đơn hàng
+            return View(orders); // Trả về view với danh sách đơn hàng
         }
 
         // GET: Order/Details/5
@@ -29,16 +30,16 @@ namespace WebBanCaCanh.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest); // Trả về lỗi nếu id không hợp lệ
             }
 
-            var order = await _orderService.GetOrderByIdAsync(id.Value);
+            var order = await _orderService.GetOrderByIdAsync(id.Value); // Lấy thông tin đơn hàng theo id
             if (order == null)
             {
-                return HttpNotFound();
+                return HttpNotFound(); // Trả về lỗi nếu không tìm thấy đơn hàng
             }
 
-            return View(order);
+            return View(order); // Trả về view với thông tin đơn hàng
         }
     }
 }

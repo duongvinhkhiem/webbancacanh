@@ -9,6 +9,7 @@ using WebBanCaCanh.Service;
 
 namespace WebBanCaCanh.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PromotionController : Controller
     {
         private readonly IPromotionService _promotionService;

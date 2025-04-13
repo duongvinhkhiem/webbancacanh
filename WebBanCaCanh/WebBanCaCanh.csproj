@@ -26,6 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -63,12 +65,9 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -112,6 +111,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Unity.Abstractions, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.11.1\lib\net47\Unity.Abstractions.dll</HintPath>
     </Reference>
@@ -231,22 +231,18 @@
     <Compile Include="Migrations\202404201208451_UserId-Null.Designer.cs">
       <DependentUpon>202404201208451_UserId-Null.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202405280036408_AddProductImages.cs" />
+    <Compile Include="Migrations\202405280036408_AddProductImages.Designer.cs">
+      <DependentUpon>202405280036408_AddProductImages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProductImage.cs" />
     <Compile Include="Models\ProductPromotion.cs" />
-    <Compile Include="Service\BannerService.cs" />
     <Compile Include="Service\CategoryService.cs" />
-    <Compile Include="Service\IBannerService.cs" />
     <Compile Include="Service\ICategoryService.cs" />
-    <Compile Include="Service\INewsService.cs" />
-    <Compile Include="Service\IOrderDetailService.cs" />
-    <Compile Include="Service\IOrderService.cs" />
     <Compile Include="Service\IProductPromotionService.cs" />
     <Compile Include="Service\IProductService.cs" />
     <Compile Include="Service\IPromotionService.cs" />
-    <Compile Include="Service\NewsService.cs" />
-    <Compile Include="Service\OrderDetailService.cs" />
-    <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\ProductPromotionService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\PromotionService.cs" />
@@ -254,8 +250,6 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
-    <Compile Include="Models\Banner.cs" />
-    <Compile Include="Models\News.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Product.cs" />
@@ -427,6 +421,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202404201208451_UserId-Null.resx">
       <DependentUpon>202404201208451_UserId-Null.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202405280036408_AddProductImages.resx">
+      <DependentUpon>202405280036408_AddProductImages.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

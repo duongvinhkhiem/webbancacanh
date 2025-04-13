@@ -4,7 +4,14 @@
 {
     <div class="col-md-3 my-3">
         <div class="card product-card" onclick="window.location.href='@Url.Action("Details", "Home", new { id = Model.ProductId })'" style="cursor: pointer;">
-            <img src="/Content/Images/@Model.ImageUrl" class="img-rounded card-img-top fixed-size-img" alt="@Model.ProductName">
+            @if (Model.ProductImages != null && Model.ProductImages.Count > 0)
+            {
+                <img src="~/Content/Images/@Model.ProductImages.First().ImageUrl" class="card-img-top fixed-size-img" alt="@Model.ProductName" />
+            }
+            else
+            {
+                <img src="~/Content/Images/placeholder.png" class="card-img-top fixed-size-img" alt="No Image Available" />
+            }
             <div class="card-body">
                 <p class="card-title text-center product-name">@Model.ProductName</p>
                 <p class="card-text text-center lead font-weight-bold">@string.Format("{0:#,##0} đ", Model.Price)</p>

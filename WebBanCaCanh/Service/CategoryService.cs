@@ -19,24 +19,28 @@ namespace WebBanCaCanh.Service
         // Phương thức để lấy tất cả các danh mục bao gồm các sản phẩm của mỗi danh mục
         public async Task<List<Category>> GetAllCategoriesWithProductsAsync()
         {
-            return await _context.Categories.Include(c => c.Products).ToListAsync();
+            return await _context.Categories
+                .Include(c => c.Products.Select(p => p.ProductImages))
+                .ToListAsync();
         }
+
         public async Task<Category> GetCategoryWithProductsByCategoryIdAsync(int? categoryId)
         {
             if (categoryId.HasValue)
             {
                 return await _context.Categories
                     .Where(c => c.CategoryId == categoryId)
-                    .Include(c => c.Products)
+                    .Include(c => c.Products.Select(p => p.ProductImages))
                     .FirstOrDefaultAsync();
             }
             else
             {
                 return await _context.Categories
-                    .Include(c => c.Products)
+                    .Include(c => c.Products.Select(p => p.ProductImages))
                     .FirstOrDefaultAsync();
             }
         }
+
 
         public async Task<int> GetCategoryCountAsync()
         {

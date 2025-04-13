@@ -4,15 +4,26 @@
     ViewBag.Title = "News";
 }
 
-<div class="container">
-   
-            <div class="card mb-4">
-                <img class="card-img-top" src="/Content/Images/@Model.ImageUrl" alt="@Model.Title">
-                <div class="card-body">
-                    <h5 class="card-title">@Model.Title</h5>
-                    <p class="card-text">@Model.Content</p>
-                    <p class="card-text"><small class="text-muted">Đăng ngày @Model.CreatedAt.ToShortDateString()</small></p>
-                 
-                </div>
-            </div>
+<div class="container mt-4">
+    <h1 class="text-center text-uppercase">@Model.Title</h1>
+    <div class="card mb-4">
+        <img class="card-img-top img-fluid mx-auto d-block" src="/Content/Images/@Model.ImageUrl" alt="@Model.Title" style="max-width: 50%; height: auto;">
+        <div class="card-body">
+            <h5 class="card-title text-center">@Model.Title</h5>
+            <p class="card-text">@Model.Content</p>
+            <p class="card-text text-right"><small class="text-muted">Đăng ngày @Model.CreatedAt.ToShortDateString()</small></p>
+        </div>
+    </div>
 </div>
+
+<style>
+    .card-img-top {
+        max-width: 50%;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .card-body {
+        text-align: justify;
+    }
+</style>

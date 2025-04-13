@@ -8,6 +8,7 @@ using WebBanCaCanh.Service;
 
 namespace WebBanCaCanh.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminHomeController : Controller
     {
         // GET: Admin/AdminHome

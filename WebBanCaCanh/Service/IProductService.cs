@@ -17,5 +17,7 @@ namespace WebBanCaCanh.Service
         Task<bool> AddProductAsync(Product product);
         Task<bool> UpdateProductAsync(Product product);
         Task<bool> DeleteProductAsync(int id);
+        Task<bool> AddProductImageAsync(ProductImage productImage);
+        Task<bool> DeleteProductImageAsync(int imageId);
     }
 }

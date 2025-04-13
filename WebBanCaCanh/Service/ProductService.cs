@@ -37,12 +37,12 @@ namespace WebBanCaCanh.Service
         }
         public async Task<List<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.Include(p => p.ProductImages).ToListAsync();
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.ProductId == id);
         }
         public async Task<List<Product>> SearchProductsAsync(string query)
         {
@@ -93,6 +93,34 @@ namespace WebBanCaCanh.Service
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
                 return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> AddProductImageAsync(ProductImage productImage)
+        {
+            _context.ProductImages.Add(productImage);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteProductImageAsync(int imageId)
+        {
+            try
+            {
+                var image = await _context.ProductImages.FindAsync(imageId);
+                if (image == null)
+                    return false;
+
+                _context.ProductImages.Remove(image);
+                var imagePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/Images/" + image.ImageUrl);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                return await _context.SaveChangesAsync() > 0;
             }
             catch (Exception)
             {

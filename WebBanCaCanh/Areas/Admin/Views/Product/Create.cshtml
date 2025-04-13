@@ -23,8 +23,6 @@
                 @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
             </div>
 
-
-
             <div class="form-group">
                 @Html.LabelFor(model => model.StockQuantity, "Số lượng tồn")
                 @Html.TextBoxFor(model => model.StockQuantity, new { @class = "form-control", type = "number" })
@@ -43,12 +41,14 @@
                 @Html.LabelFor(model => model.Description, "Mô tả")
                 @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
             </div>
-         
 
             <div class="form-group my-1">
-                <label for="imageFile">Ảnh sản phẩm</label>
-                <input type="file" name="imageFile" />
-              
+                <label for="imageFiles">Ảnh sản phẩm</label>
+                <input type="file" id="imageFiles" name="imageFiles" multiple onchange="previewImages()" />
+            </div>
+
+            <div id="imagePreviewContainer" class="image-preview-container">
+                <!-- Images will be displayed here -->
             </div>
 
             <div class="form-group">
@@ -60,7 +60,6 @@
                     @Html.RadioButtonFor(model => model.IsVisible, false, new { id = "isVisibleFalse" })
                     <label for="isVisibleFalse">Không</label>
                 </div>
-            
             </div>
         </div>
     </div>
@@ -71,4 +70,60 @@
             <a href="@Url.Action("Index")" class="btn btn-secondary">Trở về</a>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script>
+        function previewImages() {
+            var previewContainer = document.getElementById('imagePreviewContainer');
+            previewContainer.innerHTML = '';
+            var files = document.getElementById('imageFiles').files;
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var div = document.createElement('div');
+                    div.className = 'image-preview';
+
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'img-thumbnail';
+                    img.style.height = '100px';
+
+                    var button = document.createElement('button');
+                    button.className = 'btn btn-danger btn-sm';
+                    button.innerHTML = 'X';
+                    button.onclick = function () {
+                        div.remove();
+                    };
+
+                    div.appendChild(img);
+                    div.appendChild(button);
+                    previewContainer.appendChild(div);
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+    <style>
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .image-preview {
+            position: relative;
+        }
+
+            .image-preview button {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
+    </style>
 }

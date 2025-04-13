@@ -7,7 +7,7 @@ using WebBanCaCanh.Models;
 
 namespace WebBanCaCanh.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsersAdminController : Controller
     {
         private readonly ApplicationUserManager _userManager;

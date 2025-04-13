@@ -9,7 +9,7 @@
         {
             if (banner.IsVisible)
             {
-                <div class="banner">
+                <div class="banner" style="display:none;">
                     <img src="/Content/Images/@banner.ImageUrl" alt="@banner.Content" />
                 </div>
             }
@@ -17,6 +17,12 @@
     </div>
     <button class="prev">&#10094;</button>
     <button class="next">&#10095;</button>
+    <div class="dot-container">
+        @for (int i = 0; i < ViewBag.Banners.Count; i++)
+        {
+            <span class="dot" data-slide-to="@i"></span>
+        }
+    </div>
 </div>
 
 @for (int i = 0; i < Model.Count; i++)
@@ -39,29 +45,38 @@
     <script>
         $(document).ready(function () {
             var slideIndex = 0;
-            showSlides();
+            var slides = $(".banner");
+            var dots = $(".dot");
+            showSlides(slideIndex);
 
-            function showSlides() {
-                var slides = $(".banner");
-                if (slides.length == 0) return;
-                for (var i = 0; i < slides.length; i++) {
-                    slides[i].style.display = "none";
-                }
-                slideIndex++;
-                if (slideIndex > slides.length) { slideIndex = 1 }
-                slides[slideIndex - 1].style.display = "block";
-                setTimeout(showSlides, 6000); // Change image every 6 seconds
+            function showSlides(index) {
+                slides.hide();
+                dots.removeClass("active");
+
+                slideIndex = index;
+                if (slideIndex >= slides.length) slideIndex = 0;
+                if (slideIndex < 0) slideIndex = slides.length - 1;
+
+                slides.eq(slideIndex).show();
+                dots.eq(slideIndex).addClass("active");
             }
 
             $(".prev").click(function () {
-                slideIndex--;
-                showSlides();
+                showSlides(slideIndex - 1);
             });
 
             $(".next").click(function () {
-                slideIndex++;
-                showSlides();
+                showSlides(slideIndex + 1);
             });
+
+            $(".dot").click(function () {
+                var index = $(this).data("slide-to");
+                showSlides(index);
+            });
+
+            setInterval(function () {
+                showSlides(slideIndex + 1);
+            }, 6000);
         });
     </script>
 }
@@ -70,4 +85,74 @@
     .first-category {
         margin-top: 50px; /* Adjust the value as needed */
     }
+
+    .banner-container {
+        position: relative;
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    .banner {
+        display: none;
+        width: 100%;
+    }
+
+        .banner img {
+            width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -22px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+        background-color: rgba(0, 0, 0, 0.5); /* Add background color to buttons */
+    }
+
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+    .dot-container {
+        text-align: center;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    .dot {
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+        .dot.active {
+            background-color: #717171;
+        }
 </style>

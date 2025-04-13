@@ -34,6 +34,16 @@ namespace WebBanCaCanh.Controllers
         }
         public async Task<ActionResult> Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                var user = await userManager.FindByIdAsync(User.Identity.GetUserId());
+
+                if (user != null && await userManager.IsInRoleAsync(user.Id, "Admin"))
+                {
+                    return RedirectToAction("Index", "AdminHome", new { area = "Admin" });
+                }
+            }
             var categories = await _categoryService.GetAllCategoriesWithProductsAsync();
             var banners = await _bannerService.GetAllBannersAsync();
             ViewBag.Banners = banners;

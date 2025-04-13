@@ -1,7 +1,7 @@
-﻿<div class="col-md-8 col-lg-7 col-xl-6 mx-auto">
+﻿<div class="col-md-9 col-lg-9 col-xl-9 mx-auto my-2">
     @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "w-100", id = "searchForm" }))
     {
-        <div class="input-group w-100">
+        <div class="input-group w-100 search-form">
             <input type="search" class="form-control border-secondary" id="searchInput" name="query" placeholder="Tìm kiếm">
             <button type="submit" class="btn btn-outline-secondary" id="btn-search">
                 <i class="fas fa-search"></i>
@@ -9,3 +9,46 @@
         </div>
     }
 </div>
+<style>
+    .search-form {
+        position: relative;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+        .search-form .form-control {
+            border: none;
+            border-radius: 0;
+            height: 45px;
+            padding: 0 20px;
+            font-size: 16px;
+        }
+
+        .search-form .btn {
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 0;
+            height: 45px;
+            width: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+            .search-form .btn:hover {
+                background: #0056b3;
+            }
+
+            .search-form .btn i {
+                font-size: 18px;
+            }
+
+        .search-form .form-control:focus {
+            box-shadow: none;
+        }
+</style>

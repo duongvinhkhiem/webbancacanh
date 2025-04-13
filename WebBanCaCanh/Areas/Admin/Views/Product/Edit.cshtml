@@ -4,7 +4,6 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-
 <h1 class="mt-5 text-center text-uppercase">Chỉnh sửa sản phẩm</h1>
 
 @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -12,7 +11,6 @@
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(model => model.ProductId)
-    @Html.HiddenFor(model => model.ImageUrl)
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -26,9 +24,6 @@
                 @Html.TextBoxFor(model => model.Price, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
             </div>
-
-
-
 
             <div class="form-group">
                 @Html.LabelFor(model => model.StockQuantity, "Số lượng tồn")
@@ -44,17 +39,31 @@
         </div>
 
         <div class="col-md-6">
-
             <div class="form-group">
                 @Html.LabelFor(model => model.Description, "Mô tả")
                 @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
             </div>
-            <div class="form-group my-2">
-                <label for="imageFile">Ảnh sản phẩm</label>
-                <input type="file" id="imageFile" name="imageFile" />
 
+            <div class="form-group my-2">
+                <label for="imageFiles">Ảnh sản phẩm</label>
+                <input type="file" id="imageFiles" name="imageFiles" multiple />
             </div>
 
+            <!-- Display existing images with delete button -->
+            <div id="existingImages" class="form-group my-2">
+                <label>Ảnh đã chọn:</label>
+                <div class="row">
+                    @foreach (var image in Model.ProductImages)
+                    {
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="~/Content/Images/@image.ImageUrl" alt="@Model.ProductName" class="img-thumbnail" />
+                                <button type="button" class="btn btn-danger btn-sm btn-delete-image" data-image-id="@image.ProductImageId">X</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
 
             <div class="form-group">
                 @Html.LabelFor(model => model.IsVisible, "Hiển thị")
@@ -65,7 +74,6 @@
                     @Html.RadioButtonFor(model => model.IsVisible, false, new { id = "isVisibleFalse" })
                     <label for="isVisibleFalse">Không</label>
                 </div>
-
             </div>
         </div>
     </div>
@@ -76,4 +84,44 @@
             <a href="@Url.Action("Index")" class="btn btn-secondary">Trở về</a>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.btn-delete-image').click(function() {
+                var button = $(this);
+                var imageId = button.data('image-id');
+                if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
+                    $.ajax({
+                        url: '@Url.Action("DeleteImage", "Product")',
+                        type: 'POST',
+                        data: { imageId: imageId },
+                        success: function(response) {
+                            if (response.success) {
+                                button.closest('.col-md-3').remove();
+                            } else {
+                                alert('Lỗi khi xóa ảnh.');
+                            }
+                        },
+                        error: function() {
+                            alert('Lỗi khi xóa ảnh.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .thumbnail {
+            position: relative;
+        }
+
+        .btn-delete-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
 }

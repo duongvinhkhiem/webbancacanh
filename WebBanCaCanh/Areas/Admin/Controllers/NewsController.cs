@@ -10,6 +10,7 @@ using WebBanCaCanh.Service;
 
 namespace WebBanCaCanh.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class NewsController : Controller
     {
         private readonly INewsService _newsService;
@@ -81,12 +82,34 @@ namespace WebBanCaCanh.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                var existingNews = await _newsService.GetNewsByIdAsync(news.NewsId);
+                if (existingNews == null)
+                {
+                    return HttpNotFound();
+                }
+
                 if (imageFile != null && imageFile.ContentLength > 0)
                 {
+                    // Delete the old image if it exists
+                    if (!string.IsNullOrEmpty(existingNews.ImageUrl))
+                    {
+                        var oldImagePath = Path.Combine(Server.MapPath("~/Content/Images/"), existingNews.ImageUrl);
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    // Save the new image
                     var imageName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
                     var imagePath = Path.Combine(Server.MapPath("~/Content/Images/"), imageName);
                     imageFile.SaveAs(imagePath);
-                    news.ImageUrl =  imageName;
+                    news.ImageUrl = imageName;
+                }
+                else
+                {
+                    // Retain the old image URL if no new image is uploaded
+                    news.ImageUrl = existingNews.ImageUrl;
                 }
 
                 var result = await _newsService.UpdateNewsAsync(news);
@@ -100,10 +123,34 @@ namespace WebBanCaCanh.Areas.Admin.Controllers
 
         // POST: News/Delete/5
         [HttpPost]
+    
         public async Task<JsonResult> Delete(int id)
         {
+            var news = await _newsService.GetNewsByIdAsync(id);
+            if (news == null)
+            {
+                return Json(new { success = false });
+            }
+
             var result = await _newsService.DeleteNewsAsync(id);
+            if (result)
+            {
+                DeleteImageFile(news.ImageUrl);
+            }
+
             return Json(new { success = result });
+        }
+
+        private void DeleteImageFile(string imageUrl)
+        {
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                var imagePath = Path.Combine(Server.MapPath("~/Content/Images/"), imageUrl);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
         }
     }
 }
